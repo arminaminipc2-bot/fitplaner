@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.cache/
+*.log
+.env
+.env.*.local
+.netlify/
+apps/api/dev.db
+apps/api/dev.db-journal
+apps/api/test.db
+apps/api/test.db-journal
+apps/api/test.db-wal
+apps/api/test.db-shm
+.resp/
+.agents/
