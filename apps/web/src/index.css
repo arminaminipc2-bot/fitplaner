@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/* Vazirmatn is self-hosted: it is the default and the fallback for every other
+   family, so a blocked or absent font CDN can never leave the app without readable
+   Persian text. The optional families in lib/fonts.ts are fetched on demand. */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/vazirmatn-var.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   TOKENS — strict monochrome. Every distinction in the interface
+   is made with surface elevation or ink weight, never hue.
+   ============================================================ */
+
+@theme {
+  /* surfaces */
+  --color-canvas: #09090b;
+  --color-card: #202024;
+  --color-card-2: #171719;
+  --color-card-3: #252529;
+  --color-line: #34343a;
+  --color-divider: #303036;
+
+  /* ink */
+  --color-ink: #ffffff;
+  --color-ink-2: #a1a1aa;
+  --color-ink-3: #696970;
+  --color-ink-4: #4a4a52;
+
+  /* mono fills used by rings, bars and calendar dots */
+  --color-fill-strong: #f4f4f5;
+  --color-fill-mid: #71717a;
+  --color-fill-weak: #3f3f46;
+
+  --font-sans: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Vazirmatn", ui-monospace, monospace;
+
+  /* Type scale — each step has one job. No 13/15/17px in-between steps:
+     Persian needs fewer, clearer levels, and 12px is the floor for readable
+     metadata. UI text uses 2xs → 2xl; 3xl and up are numerals/display only. */
+  --text-2xs: 0.75rem; /* 12 — captions, units, chart ticks, nav labels */
+  --text-2xs--line-height: 1.5;
+  --text-sm: 0.875rem; /* 14 — secondary body, buttons, table rows */
+  --text-sm--line-height: 1.55;
+  --text-base: 1rem; /* 16 — body and form values */
+  --text-base--line-height: 1.65;
+  --text-lg: 1.125rem; /* 18 — card titles, app bar */
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.25rem; /* 20 — section titles */
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.5rem; /* 24 — page titles */
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 1.875rem; /* 30 — large numerals */
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 2.125rem; /* 34 — hero numerals */
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 2.5rem; /* 40 — reserved display */
+  --text-5xl--line-height: 1.05;
+  --text-6xl: 3rem; /* 48 — reserved display */
+  --text-6xl--line-height: 1;
+
+  /* Spacing & Unified Fully-Rounded System
+     - All interactive controls (buttons, inputs, choices, pills, badges, dock items): 9999px (fully round)
+     - All outer cards, containers, panels, modals, sheets: 1.75rem (28px - soft uniform rounded) */
+  --spacing: 0.25rem;
+
+  --radius-card: 1.75rem; /* 28px - uniform for all cards & panels */
+  --radius-3xl: 2rem;     /* 32px - bottom sheets & modals */
+  --radius-2xl: 1.75rem;  /* 28px */
+  --radius-xl: 9999px;    /* completely rounded pill for controls */
+  --radius-lg: 9999px;    /* completely rounded pill */
+  --radius-md: 9999px;    /* completely rounded pill */
+  --radius-sm: 9999px;    /* completely rounded pill */
+  --radius-xs: 9999px;    /* completely rounded pill */
+  --radius-pill: 9999px;  /* completely rounded pill */
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -18px rgba(0, 0, 0, 0.9);
+  --shadow-pop: 0 24px 64px -24px rgba(0, 0, 0, 0.95);
+
+  /* layout */
+  --breakpoint-tablet: 40rem; /* 640 */
+  --breakpoint-split: 51.25rem; /* 820 — one column becomes two */
+  --breakpoint-desktop: 67.5rem; /* 1080 — tab bar becomes sidebar */
+
+  --animate-rise: rise 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-pulse-dot: pulse-dot 1.6s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+  --animate-scale-pop: scale-pop 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes scale-pop {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.82);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Persian glyphs need a touch more leading than Latin to avoid the
+     descenders of ی/ج colliding with the line above. */
+  p {
+    line-height: 1.65;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: var(--font-sans);
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-canvas);
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  [aria-busy="true"] {
+    cursor: progress;
+  }
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* uppercase-tracked Latin micro-labels survive in charts as data keys;
+   everything user-facing is Persian */
+@utility label-wide {
+  letter-spacing: 0.14em;
+}
+
+@utility card-surface {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+}
+
+@utility tnum-track {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Nastaliq ascenders and descenders collide at the tight leading the UI uses, so
+   picking such a family also loosens line-height. lib/fonts.ts marks the families
+   that need it with data-font-category on <html>. */
+html[data-font-category="nastaliq"] :is(p, li, span, a, h1, h2, h3, label, td) {
+  line-height: 1.9;
+}
+
+/* skeleton loading fill — grayscale, no hue */
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-card-3) 0%,
+    var(--color-line) 40%,
+    var(--color-card-3) 80%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
